@@ -25,8 +25,4 @@
 
 ---
 
-## 🚀 طريقة التشغيل والاستخدام
-
-1. قم بتحميل أو استنساخ المستودع (Repository):
-   ```bash
-   git clone [https://github.com/HaythamZeidan/crossword-game.git](https://github.com/HaythamZeidan/crossword-game.git)
+## 🚀 رابط اللعبة 🎮 
