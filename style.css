@@ -1,76 +1,229 @@
-    body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #f8f9fa;
-            user-select: none;
-        }
-        
-        .top-bar {
-            background-color: #0d6efd;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+body, html {
+    font-family: 'Cairo', sans-serif;
+    background-color: #f8f9fa;
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    height: 100svh; 
+    width: 100vw;
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+    touch-action: none;
+}
 
-        .level-btn {
-            height: 80px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border-radius: 15px;
-            transition: transform 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+#game-ui { 
+    display: flex; 
+    flex-direction: column; 
+    height: 100%; 
+    width: 100%; 
+    overflow: hidden;
+}
 
-        .level-btn:hover:not(:disabled) { transform: scale(1.05); }
-        .level-btn:disabled {
-            background-color: #e9ecef;
-            border-color: #dee2e6;
-            color: #adb5bd;
-            cursor: not-allowed;
-        }
-        .level-btn:disabled i.fa-lock {
-            position: absolute;
-            font-size: 2rem;
-            color: #6c757d;
-            opacity: 0.5;
-        }
+.top-bar {
+    background-color: #0d6efd;
+    color: white;
+    padding: 6px 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
 
-        #crossword-container {
-            display: inline-block;
-            background: #212529;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+/* حاوية المحتوى لتفادي تداخل الـ Footer */
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
 
-        .crossword-row { display: flex; }
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    overflow: hidden;
+    min-height: 0;
+}
 
-        .crossword-cell {
-            width: 40px;
-            height: 40px;
-            margin: 2px;
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: bold;
-            border: 2px solid #ccc;
-            border-radius: 6px;
-            background-color: white;
-            color: #000;
-        }
+.level-btn {
+    height: 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 10px;
+}
 
-        .crossword-cell:focus {
-            outline: none;
-            border-color: #0d6efd;
-            background-color: #e7f1ff;
-        }
+.game-content {
+    display: flex;
+    flex-direction: row; 
+    flex: 1;
+    gap: 15px;
+    overflow: hidden;
+    min-height: 0;
+    align-items: center;
+}
 
-        .crossword-black {
-            background-color: #212529;
-            border: none;
-        }
+.hints-section {
+    flex: 1.2;
+    max-width: 320px;
+    border-radius: 8px;
+    border-right: 4px solid #0d6efd;
+    overflow-y: hidden;
+    max-height: 100%;
+    padding: 8px !important;
+}
 
-        footer { border-top: 1px solid #dee2e6; padding-top: 20px; margin-top: 40px; }
+.hints-section ul li {
+    font-size: clamp(0.75rem, 1.8vh, 0.95rem);
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.grid-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* التجاوب مع الوضع العمودي (Portrait) */
+@media screen and (orientation: portrait) {
+    .game-content {
+        flex-direction: column; 
+        justify-content: center;
+    }
     
+    .hints-section {
+        max-width: 100%;
+        flex: 0 0 auto;
+        max-height: 22vh; 
+        border-right: none;
+        border-bottom: 3px solid #0d6efd;
+        overflow-y: hidden; 
+    }
+
+    #hints-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .hints-section ul li {
+        font-size: clamp(0.65rem, 1.5vh, 0.8rem);
+        background: #e9ecef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-bottom: 0;
+        flex: 1 1 45%; 
+    }
+    
+    .grid-section {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+#crossword-container {
+    background: #212529;
+    padding: 4px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    max-height: 65vh; /* حماية إضافية لعدم خروج الشبكة الطويلة عن الحدود */
+}
+
+.crossword-row {
+    display: flex;
+    justify-content: center;
+    gap: 1px;
+}
+
+/* تعديل قياسات الخلايا لتتناسب أوتوماتيكياً مع المراحل الطويلة كالمرحلة التاسعة */
+.crossword-cell {
+    width: clamp(24px, 5.5vmin, 42px);
+    height: clamp(24px, 5.5vmin, 42px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #6c757d;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: clamp(0.9rem, 3.5vmin, 1.3rem);
+    font-weight: bold;
+}
+
+.crossword-black {
+    background-color: transparent;
+    border: none;
+}
+
+#letters-container {
+    width: 100%;
+    min-height: 45px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    background: #fff;
+    flex-shrink: 0;
+    max-height: 22vh;
+    overflow-y: auto;
+}
+
+/* تعديل قياسات مربعات الحروف لتتوافق مع الشبكة المتكيفة */
+.letter-box {
+    width: clamp(24px, 5.5vmin, 42px);
+    height: clamp(24px, 5.5vmin, 42px);
+    background-color: #ffc107;
+    color: #000;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: clamp(0.9rem, 3.5vmin, 1.3rem);
+    cursor: grab;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    touch-action: none; 
+}
+
+/* تنسيق وتثبيت الـ Footer السفلي */
+.app-footer {
+    background-color: #ffffff;
+    border-top: 1px solid #dee2e6;
+    padding: 4px 10px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #495057;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+/* صندوق وهمي يظهر أثناء السحب */
+.drag-ghost {
+    position: fixed;
+    background-color: #ffc107;
+    color: #000;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: clamp(0.9rem, 3.5vmin, 1.3rem);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    z-index: 99999;
+    pointer-events: none;
+    transform: scale(1.1);
+}
